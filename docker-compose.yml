@@ -1,8 +1,6 @@
 services:
   payload:
-    build:
-      context: .
-      dockerfile: Dockerfile # আপনার ঐ প্রোডাকশন Dockerfile টি ব্যবহার হবে
+    image: freecodestack/portfolio:latest
     ports:
       - '80:3000'
     env_file:
@@ -16,7 +14,6 @@ services:
 
   mongo:
     image: mongo:latest
-    # প্রোডাকশনে পোর্ট বাইরে না রাখাই ভালো, শুধু কন্টেইনার টু কন্টেইনার কথা বলবে
     volumes:
       - prod_data:/data/db
 
