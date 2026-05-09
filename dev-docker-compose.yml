@@ -12,7 +12,7 @@ services:
     environment:
       - NODE_ENV=development
       # .env ফাইলে MONGODB_URI থাকলে সেটা নিচের মতো হতে হবে:
-      - MONGODB_URI=mongodb://mongo:27017/payload-dev
+      - DATABASE_URL=mongodb://mongo:27017/selfolio_dev
     # pnpm এনাবল করে ডিপেন্ডেন্সি ইন্সটল এবং রান করবে
     command: sh -c "corepack enable && corepack prepare pnpm@9.15.4 --activate && pnpm install && pnpm dev"
 

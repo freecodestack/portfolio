@@ -9,7 +9,8 @@ services:
       - .env
     environment:
       - NODE_ENV=production
-      - MONGODB_URI=mongodb://mongo:27017/payload-prod
+      - DATABASE_URL=mongodb://mongo:27017/selfolio_prod
+
     depends_on:
       - mongo
 
