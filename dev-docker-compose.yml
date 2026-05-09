@@ -1,0 +1,30 @@
+services:
+  payload:
+    image: node:22-alpine
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - /app/node_modules # গুরুত্বপূর্ণ: হোস্টের node_modules যেন কন্টেইনারে ওভাররাইড না করে
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=development
+      # .env ফাইলে MONGODB_URI থাকলে সেটা নিচের মতো হতে হবে:
+      - MONGODB_URI=mongodb://mongo:27017/payload-dev
+    # pnpm এনাবল করে ডিপেন্ডেন্সি ইন্সটল এবং রান করবে
+    command: sh -c "corepack enable && corepack prepare pnpm@9.15.4 --activate && pnpm install && pnpm dev"
+
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - dev_data:/data/db
+
+volumes:
+  dev_data:
