@@ -11,7 +11,7 @@ WORKDIR /app
 
 # ২. Copy only lock file
 COPY package.json pnpm-lock.yaml* ./
-RUN pnpm i --frozen-lockfile
+RUN pnpm i --no-frozen-lockfile
 
 FROM base AS builder
 WORKDIR /app
