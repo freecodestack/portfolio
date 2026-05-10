@@ -11,7 +11,7 @@ WORKDIR /app
 
 # ২. Copy only lock file
 COPY package.json pnpm-lock.yaml* ./
-RUN pnpm i --no-frozen-lockfile
+RUN pnpm i --frozen-lockfile
 
 FROM base AS builder
 WORKDIR /app
@@ -19,17 +19,14 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # ৩. Build 
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV PAYLOAD_SECRET=829853b966334450cac44bf1
-ENV PAYLOAD_IGNORE_INITIALIZE_DB=true 
-ENV DATABASE_URL=mongodb://127.0.0.1:27017/selfolio
+ENV NEXT_TELEMETRY_DISABLED 1
 RUN pnpm run build
 
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
