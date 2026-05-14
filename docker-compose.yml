@@ -1,21 +1,28 @@
 services:
   payload:
-    build:
-      context: .
-      dockerfile: Dockerfile # আপনার ঐ প্রোডাকশন Dockerfile টি ব্যবহার হবে
+    image: node:22-alpine
     ports:
-      - '80:3000'
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - /app/node_modules # গুরুত্বপূর্ণ: হোস্টের node_modules যেন কন্টেইনারে ওভাররাইড না করে
+    working_dir: /app
     env_file:
       - .env
     environment:
-      - NODE_ENV=production
-      - MONGODB_URI=mongodb://mongo:27017/payload-prod
+      - NODE_ENV=development
+      # .env ফাইলে MONGODB_URI থাকলে সেটা নিচের মতো হতে হবে:
+      - DATABASE_URL=mongodb://mongo:27017/selfolio_dev
+    # pnpm এনাবল করে ডিপেন্ডেন্সি ইন্সটল এবং রান করবে
+    command: sh -c "corepack enable && corepack prepare pnpm@9.15.4 --activate && pnpm install && pnpm build && pnpm start"
+
     depends_on:
       - mongo
 
   mongo:
     image: mongo:latest
-    # প্রোডাকশনে পোর্ট বাইরে না রাখাই ভালো, শুধু কন্টেইনার টু কন্টেইনার কথা বলবে
+    ports:
+      - '27017:27017'
     volumes:
       - prod_data:/data/db
 
